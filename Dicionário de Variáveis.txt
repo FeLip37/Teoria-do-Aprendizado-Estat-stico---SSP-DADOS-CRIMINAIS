@@ -1,0 +1,44 @@
+Dicionário de Variáveis
+Relatório de Consolidação de Dados Criminais (2023-2025)
+
+Integrantes:
+Arthur Bispo Reis
+Felipe Macedo Dutra
+Lucas Barros
+
+    Introdução
+    Este documento apresenta o Dicionário de Variáveis referente ao dataset consolidado e sumarizado de ocorrências criminais do estado de São Paulo, abrangendo o período de 2023 a 2025. Diferente do relatório anterior, este conjunto de dados foi processado para análise estatística, onde cada linha representa o total mensal de crimes por município. O objetivo é permitir o cálculo de médias e a visualização da variabilidade regional através de boxplots.
+
+    Variáveis de Identificação (Qualitativas)
+
+NOME_MUNICIPIO
+Descrição: Nome do município paulista onde as ocorrências foram contabilizadas.
+Tipo: Qualitativa Nominal.
+Valores: Nome da cidade em maiúsculas (ex: SANTOS, CAMPINAS).
+
+ANO_ESTATISTICA
+Descrição: Ano de referência da contabilização oficial dos crimes.
+Tipo: Qualitativa Ordinal.
+Valores: 2023, 2024 e 2025.
+
+MES_ESTATISTICA
+Descrição: Mês de referência da contabilização oficial dos crimes.
+Tipo: Qualitativa Ordinal.
+Valores: 1 a 12 (Janeiro a Dezembro).
+
+    Variáveis de Intensidade Criminal (Quantitativas)
+
+FURTO.DE.VEÍCULO
+Descrição: Quantidade total de furtos de veículos registrados no município naquele mês específico.
+Tipo: Quantitativa Discreta.
+Valores: Números inteiros positivos (0, 1, 2, ... n).
+
+ESTUPRO
+Descrição: Soma das ocorrências de violência sexual registradas na cidade durante o mês.
+Tipo: Quantitativa Discreta.
+Valores: Números inteiros positivos.
+
+HOMICÍDIO.DOLOSO
+Descrição: Contagem de crimes de morte intencional registrados no período mensal.
+Tipo: Quantitativa Discreta.
+Valores: Números inteiros positivos.
