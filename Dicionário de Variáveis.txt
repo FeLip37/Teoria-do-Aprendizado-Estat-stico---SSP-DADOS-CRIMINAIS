@@ -28,17 +28,27 @@ Valores: 1 a 12 (Janeiro a Dezembro).
 
     Variáveis de Intensidade Criminal (Quantitativas)
 
-FURTO.DE.VEÍCULO
-Descrição: Quantidade total de furtos de veículos registrados no município naquele mês específico.
-Tipo: Quantitativa Discreta.
-Valores: Números inteiros positivos (0, 1, 2, ... n).
-
-ESTUPRO
-Descrição: Soma das ocorrências de violência sexual registradas na cidade durante o mês.
-Tipo: Quantitativa Discreta.
-Valores: Números inteiros positivos.
-
-HOMICÍDIO.DOLOSO
-Descrição: Contagem de crimes de morte intencional registrados no período mensal.
-Tipo: Quantitativa Discreta.
-Valores: Números inteiros positivos.
+APREENSÃO DE ENTORPECENTES	Registros de localização/apreensão de drogas sem prisão em flagrante imediata.
+ESTUPRO	Conjunção carnal ou ato libidinoso mediante violência ou grave ameaça (Art. 213 CP).
+ESTUPRO DE VULNERÁVEL	Estupro contra menores de 14 anos ou pessoas sem capacidade de resistência (Art. 217-A CP).
+EXTORSÃO MEDIANTE SEQUESTRO	Privação de liberdade com o fim de obter vantagem econômica como resgate.
+FURTO - OUTROS	Subtração de bens sem uso de violência ou ameaça (ex: celulares, objetos, etc).
+FURTO DE CARGA	Subtração de mercadorias transportadas sem o uso de violência.
+FURTO DE VEÍCULO	Subtração de automóveis ou motocicletas sem a presença ou ameaça ao condutor.
+HOMICÍDIO CULPOSO OUTROS	Mortes acidentais (sem intenção) fora do ambiente de trânsito.
+HOMICÍDIO CULPOSO (ACID. TRÂNSITO)	Mortes no trânsito por negligência, imprudência ou imperícia do condutor.
+HOMICÍDIO DOLOSO	Mortes com intenção de matar ou assumindo o risco (inclui Feminicídio).
+HOMICÍDIO DOLOSO (ACID. TRÂNSITO)	Homicídios no trânsito onde foi comprovado o dolo (ex: racha).
+LATROCÍNIO	Roubo seguido de morte (Art. 157, § 3º, inciso II do CP).
+LESÃO CORPORAL CULPOSA - OUTRAS	Ferimentos acidentais por negligência fora do trânsito.
+LESÃO CORPORAL CULPOSA (ACID. TRÂNSITO)	Ferimentos no trânsito decorrentes de imprudência ou imperícia.
+LESÃO CORPORAL DOLOSA	Agressões físicas voluntárias com intenção de ferir.
+LESÃO CORPORAL SEGUIDA DE MORTE	Agressão que resulta em morte, sem intenção inicial de matar (Preterdolo).
+PORTE DE ARMA	Porte ou posse ilegal de arma de fogo, acessórios ou munição.
+PORTE DE ENTORPECENTES	Detenção de drogas para consumo pessoal (Art. 28 da Lei 11.343/06).
+ROUBO - OUTROS	Subtração de bens mediante violência ou grave ameaça à pessoa.
+ROUBO A BANCO	Assalto a instituições financeiras ou transporte de valores.
+ROUBO DE CARGA	Assalto a veículos de transporte de mercadorias mediante violência.
+ROUBO DE VEÍCULO	Subtração de veículo mediante violência ou ameaça (assalto).
+TENTATIVA DE HOMICÍDIO	Atentado contra a vida que não se consumou por circunstâncias alheias à vontade do autor.
+TRÁFICO DE ENTORPECENTES	Comércio, transporte ou produção de substâncias ilícitas (Art. 33 da Lei de Drogas).
