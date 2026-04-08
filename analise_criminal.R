@@ -1,98 +1,83 @@
-# ==============================================================================
-# SCRIPT DEFINITIVO: ANÁLISE DE CRIMINALIDADE (AULAS 2 E 5)
-# ==============================================================================
+dados <- read.csv2("Dataset_Municipios_Estatistica_Formatado.csv", sep=";", check.names = FALSE)
 
-# 1. CARREGAMENTO DOS DADOS
-# Certifique-se de que o arquivo está na mesma pasta do seu script
-dados <- read.csv2("Dataset_Municipios_Estatistica_Formatado.csv", 
-                   sep = ";", check.names = FALSE, stringsAsFactors = TRUE)
+dados <- subset(dados, as.numeric(ANO_ESTATISTICA) %in% c(2023, 2024, 2025))
 
-# Definimos a variável de estudo (Exemplo: FURTO - OUTROS)
-# Para trocar o crime, basta mudar o nome entre as crases abaixo
-crime_estudo <- "FURTO - OUTROS"
-x <- dados[[crime_estudo]]
+furtos <- dados$`FURTO - OUTROS`
+ano <- dados$ANO_ESTATISTICA
 
-# ==============================================================================
-# PARTE 1: ESTATÍSTICA DESCRITIVA (AULA 2)
-# ==============================================================================
+trafico <- dados[, grep("TR.FICO", names(dados))[1]]
+homicidios <- dados[, grep("HOMIC.DIO DOLOSO$", names(dados))]
 
-# --- Estimativas de Localização ---
-media_arit   <- mean(x, na.rm = TRUE)
-mediana      <- median(x, na.rm = TRUE)
-# Média Geométrica (Ajustada para zeros: log(x+1) conforme pág. 10 da Aula 2)
-media_geom   <- exp(mean(log(x + 1), na.rm = TRUE)) - 1
-quartis      <- quantile(x, probs = c(0.25, 0.5, 0.75), na.rm = TRUE)
 
-# --- Medidas de Variabilidade ---
-variancia_tot <- var(x, na.rm = TRUE)
-desvio_padrao <- sd(x, na.rm = TRUE)
-amplitude     <- max(x, na.rm = TRUE) - min(x, na.rm = TRUE)
-# Coeficiente de Variação (CV)
-cv_perc       <- (desvio_padrao / media_arit) * 100
+media <- mean(furtos, na.rm = TRUE)
+mediana <- median(furtos, na.rm = TRUE)
+variancia <- var(furtos, na.rm = TRUE)
+desvio <- sd(furtos, na.rm = TRUE)
+cv <- (desvio / media) * 100
+media_geo <- exp(mean(log(furtos + 1), na.rm = TRUE)) - 1
 
-# --- Tabelas de Frequência ---
-freq_anos     <- table(dados$ANO_ESTATISTICA)
-prop_anos     <- prop.table(freq_anos)
+quartis <- quantile(furtos, probs = c(0.25, 0.75), na.rm = TRUE)
+amplitude <- max(furtos, na.rm = TRUE) - min(furtos, na.rm = TRUE)
 
-# ==============================================================================
-# PARTE 2: ANÁLISE POR CATEGORIA E INFERÊNCIA (AULA 5)
-# ==============================================================================
+ni <- tapply(furtos, ano, length)
+vari <- tapply(furtos, ano, var, na.rm = TRUE)
+media_variancias <- sum(ni * vari) / sum(ni)
 
-# --- Média das Variâncias (pág. 18 da Aula 5) ---
-# n_i = meses por ano | var_i = variância por ano
-n_i   <- tapply(x, dados$ANO_ESTATISTICA, length)
-var_i <- tapply(x, dados$ANO_ESTATISTICA, var, na.rm = TRUE)
+categoria_furto <- ifelse(furtos > media, "Acima da Media", "Abaixo da Media")
+tabela_contingencia <- table(ano, categoria_furto)
+teste_qui <- chisq.test(tabela_contingencia)
 
-# Filtro para ignorar anos com 1 dado só (ex: 2021) que impedem o cálculo
-validos <- !is.na(var_i)
-media_variancias <- sum(n_i[validos] * var_i[validos]) / sum(n_i[validos])
+correlacao <- cor(trafico, homicidios, use = "complete.obs")
 
-# ==============================================================================
-# PARTE 3: GRÁFICOS OTIMIZADOS (VISUALMENTE BONS)
-# ==============================================================================
+par(mfrow = c(1, 2)) # Divide a tela em 2
 
-# Configuramos a tela para mostrar 2 gráficos por vez
-par(mfrow = c(1, 2), mar = c(5, 5, 4, 2))
+boxplot(furtos ~ ano, data = dados,
+        col = "darkblue", border = "grey",
+        main = "Distribuição de Furtos por Ano",
+        xlab = "Ano", ylab = "Furtos",
+        outline = FALSE)
+hist(furtos[furtos < 100],
+     main = "Histograma de Furtos",
+     xlab = "Furtos (Ate 100 casos)", ylab = "Frequencia",
+     col = "lightblue", border = "grey")
 
-# --- Gráfico 1: Boxplot Logarítmico (Aula 5) ---
-# Usamos log1p para "desachatado" o gráfico e ver a diferença entre anos
-boxplot(log1p(x) ~ ANO_ESTATISTICA, data = dados,
-        main = paste("Boxplot:", crime_estudo),
-        xlab = "Ano", ylab = "Frequência (log1p)",
-        col = c("#4e79a7", "#e15759", "#76b7b2", "#54a24b"),
-        pch = 19, cex = 0.4, outcol = "gray")
-grid(nx = NA, ny = NULL, col = "lightgray", lty = "dotted")
+par(mfrow = c(1, 1)) # Volta a tela ao normal (1 grafico por vez)
 
-# --- Gráfico 2: Histograma Logarítmico (Aula 2) ---
-hist(log1p(x), breaks = 30,
-     main = paste("Histograma:", crime_estudo),
-     xlab = "log1p(Ocorrências)", ylab = "Frequência Absoluta",
-     col = "skyblue", border = "white")
-# Adiciona linha da média aritmética transformada no histograma
-abline(v = log1p(media_arit), col = "red", lwd = 2, lty = 2)
+dados_interior <- subset(dados, NOME_MUNICIPIO != "S.PAULO")
 
-# Reseta o layout da tela
-par(mfrow = c(1, 1))
+tabela_limpa <- data.frame(
+  Municipio = dados_interior$NOME_MUNICIPIO,
+  Homicidios = dados_interior[, grep("HOMIC.DIO DOLOSO$", names(dados_interior))]
+)
 
-# ==============================================================================
-# PARTE 4: RELATÓRIO DE RESULTADOS NO CONSOLE
-# ==============================================================================
+hom_por_cidade <- aggregate(Homicidios ~ Municipio, data = tabela_limpa, FUN = sum)
 
-cat("\n======================================================\n")
-cat("          RELATÓRIO ESTATÍSTICO DE CRIMINALIDADE      \n")
-cat("======================================================\n")
-cat("Crime Analisado: ", crime_estudo, "\n\n")
-cat("[LOCALIZAÇÃO]\n")
-cat("- Média Aritmética: ", round(media_arit, 2), "\n")
-cat("- Média Geométrica: ", round(media_geom, 2), "\n")
-cat("- Mediana:          ", mediana, "\n")
-cat("- 1º Quartil (Q1):  ", quartis[1], "\n")
-cat("- 3º Quartil (Q3):  ", quartis[3], "\n\n")
-cat("[VARIABILIDADE]\n")
-cat("- Variância Total:  ", round(variancia_tot, 2), "\n")
-cat("- Desvio Padrão:    ", round(desvio_padrao, 2), "\n")
-cat("- Coeficiente Var:  ", round(cv_perc, 2), "%\n")
-cat("- Amplitude:        ", amplitude, "\n\n")
-cat("[INFERÊNCIA - AULA 5]\n")
-cat("- Média das Variâncias (Anual):", round(media_variancias, 2), "\n")
-cat("======================================================\n")
+top5_hom <- hom_por_cidade[order(hom_por_cidade$Homicidios, decreasing = TRUE), ][1:5, ]
+
+par(mar = c(8, 4, 4, 2)) 
+
+barplot(top5_hom$Homicidios, 
+        names.arg = top5_hom$Municipio,
+        main = "Top 5 Cidades do Interior: Homicídios (2023-2025)",
+        col = "darkred",
+        ylab = "Total de Registros",
+        border = "black",
+        ylim = c(0, max(top5_hom$Homicidios) * 1.2),
+        las = 2,           
+        cex.names = 0.8)
+
+par(mar = c(5, 4, 4, 2))
+
+cat("\n Media Aritmetica:", media)
+cat("\n Media Geometrica:", media_geo)
+cat("\n Mediana (Q2):", mediana)
+cat("\n 1º Quartil (Q1):", quartis[1])
+cat("\n 3º Quartil (Q3):", quartis[2])
+cat("\n Variancia Total:", variancia)
+cat("\n Desvio Padrao:", desvio)
+cat("\n Amplitude Total:", amplitude)
+cat("\n Coeficiente de Variacao (%):", cv)
+cat("\n Media das Variancias Anuais:", media_variancias)
+cat("\n Correlacao de Pearson (Trafico x Homicidios):", correlacao, "\n")
+cat("\n Tabela de Dupla Entrada (Ano x Categoria):\n")
+print(tabela_contingencia)
